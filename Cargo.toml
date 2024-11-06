@@ -1,0 +1,35 @@
+[package]
+name = "rustml"  
+version = "0.1.0"
+edition = "2021" 
+authors = ["Udit Verma <udiverma@outlook.com>"] 
+description = "A Rust machine learning library implementation"
+license = "MIT"
+
+[dependencies]
+nalgebra = "0.32.3"      
+rand = "0.8.5"           
+thiserror = "1.0"        
+serde = { version = "1.0", features = ["derive"], optional = true } 
+
+[dev-dependencies]
+approx = "0.5.1"         
+criterion = "0.5"        
+proptest = "1.2"         
+
+[features]
+default = []
+serde-support = ["serde"]
+
+[[example]]
+name = "linear_regression"
+path = "examples/linear_regression.rs"
+
+[[example]]
+name = "logistic_regression"
+path = "examples/logistic_regression.rs"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
