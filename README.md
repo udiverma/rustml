@@ -59,7 +59,7 @@ rustml/
 Add this to your `Cargo.toml`:
 ```toml
 [dependencies]
-rustml = { git = "https://github.com/yourusername/rustml" }
+rustml = { git = "https://github.com/udiverma/rustml" }
 ```
 
 ## Usage Examples
