@@ -8,8 +8,13 @@ A pure Rust implementation of fundamental machine learning algorithms. This libr
 - **Linear Regression**
   - Normal Equation method
   - Gradient Descent optimization
-  - L2 regularization (Ridge)
   - R-squared scoring
+
+- **Ridge Regression**
+  - L2 regularization
+  - Closed-form solution
+  - R-squared scoring
+  - Regularization path analysis
 
 - **Logistic Regression**
   - Binary classification
@@ -25,10 +30,12 @@ rustml/
 │   │   ├── linear/
 │   │   │   ├── linear_regression.rs     # Linear Regression implementation
 │   │   │   ├── logistic_regression.rs   # Logistic Regression implementation
+│   │   │   ├── ridge_regression.rs      # Ridge Regression implementation
 │   │   │   ├── mod.rs                   # Module exports
 │   │   │   └── tests/                   # Unit tests
 │   │   │       ├── linear_regression_test.rs
 │   │   │       └── logistic_regression_test.rs
+│   │   │       └── ridge_regression_test.rs
 │   │   ├── classification/              # Future classification algorithms
 │   │   ├── clustering/                  # Future clustering algorithms
 │   │   ├── dimensionality_reduction/    # Future dimensionality reduction
@@ -37,6 +44,7 @@ rustml/
 ├── examples/                            # Usage examples
 │   ├── linear_regression.rs
 │   └── logistic_regression.rs
+│   └── ridge_regression.rs
 └── Cargo.toml
 ```
 
@@ -120,6 +128,34 @@ fn main() {
 }
 ```
 
+### Ridge Regression
+```rust
+use rustml::models::linear::RidgeRegression;
+use nalgebra::{DMatrix, DVector};
+
+fn main() {
+    // Create sample data with noise
+    let x = DMatrix::from_row_slice(5, 1, &[1.0, 2.0, 3.0, 4.0, 5.0]);
+    let y = DVector::from_row_slice(&[2.1, 3.8, 6.2, 8.1, 9.8]);
+
+    // Create and train model with regularization
+    let mut model = RidgeRegression::new(
+        1,      // features
+        0.1,    // lambda (regularization strength)
+    );
+
+    // Fit the model
+    model.fit(&x, &y).expect("Failed to train model");
+
+    // Make predictions
+    let predictions = model.predict(&x).expect("Failed to make predictions");
+    println!("Predictions: {}", predictions);
+
+    // Calculate R-squared score
+    let r2 = model.score(&x, &y).expect("Failed to calculate R²");
+    println!("R² Score: {:.4}", r2);
+}
+
 ## Running Examples
 ```bash
 # Run linear regression example
@@ -127,6 +163,9 @@ cargo run --example linear_regression
 
 # Run logistic regression example
 cargo run --example logistic_regression
+```
+# Run ridge regression example
+cargo run --example ridge_regression
 ```
 
 ## Running Tests
@@ -137,6 +176,7 @@ cargo test
 # Run specific model tests
 cargo test linear_regression
 cargo test logistic_regression
+cargo test ridge_regression
 
 # Run tests with output
 cargo test -- --nocapture
